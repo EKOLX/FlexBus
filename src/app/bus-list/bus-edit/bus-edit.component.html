@@ -1,14 +1,24 @@
-<div>
-    <h2>Update Bus</h2>
-    <input type="text" id="id" value="BUS-CZ3-456" />
-    <select id="busType">
-        <option value="regular" selected>Regular</option>
-        <option value="doubledecker">Doubledecker</option>
-        <option value="miniBus">MiniBus</option>
-        <option value="hybridBus">HybridBus</option>
-    </select>
-    <div>
-        <button>Save</button>
-        <button>Cancel</button>
-    </div>
-</div>
+<form>
+  <h2 mat-dialog-title>{{ title }}</h2>
+
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput type="text" id="id" placeholder="Plate number" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Bus type</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let type of busTypes" [value]="type.value">
+          {{ type.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onSave($event)">
+      Save
+    </button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</form>

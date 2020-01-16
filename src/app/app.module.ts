@@ -1,21 +1,34 @@
-import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from "./app-routing.module";
 
-import { AppComponent } from "./app.component";
+import { MaterialModule } from "./material/material.module";
+import { SvgAssetsModule } from "./svg-assets/svg-assets.module";
 
-import { LinkedinSvg } from "./svg-assets/in-logo.svg";
-import { BusSvg } from "./svg-assets/bus.svg";
-import { ArrowSvg } from "./svg-assets/arrow.svg";
-import { HomeComponent } from './home/home.component';
-import { StationListComponent } from './station-list/station-list.component';
-import { BusListComponent } from './bus-list/bus-list.component';
-import { BusEditComponent } from './bus-list/bus-edit/bus-edit.component';
+import { AppComponent } from "./app.component";
+import { HomeComponent } from "./home/home.component";
+import { StationListComponent } from "./station-list/station-list.component";
+import { BusListComponent } from "./bus-list/bus-list.component";
+import { BusEditComponent } from "./bus-list/bus-edit/bus-edit.component";
 
 @NgModule({
-  declarations: [AppComponent, LinkedinSvg, BusSvg, ArrowSvg, HomeComponent, StationListComponent, BusListComponent, BusEditComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    StationListComponent,
+    BusListComponent,
+    BusEditComponent
+  ],
+  entryComponents: [BusEditComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    MaterialModule,
+    SvgAssetsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

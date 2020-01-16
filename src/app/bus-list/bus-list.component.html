@@ -1,43 +1,37 @@
-<div>
-    <h2>Bus List</h2>
+<mat-card>
+  <mat-card-title>Bus List</mat-card-title>
 
-    <button>Add</button><button>Edit</button><button>Delete</button>
+  <mat-card-actions>
+    <button mat-stroked-button color="primary" (click)="onAdd()">Add</button>
+    <button mat-stroked-button color="warn" (click)="onEdit()">Edit</button>
+    <button mat-stroked-button color="accent" (click)="Delete()">Delete</button>
+  </mat-card-actions>
 
-    <table>
-        <thead>
-            <tr>
-                <td><input type="text" id="plateNumber" placeholder="filter by bus number" /></td>
-                <td><input type="text" id="busType" placeholder="filter by bus type" /></td>
-                <td><input type="text" id="station" placeholder="filter by bus station" /></td>
-            </tr>
-            <tr>
-                <th>Plate number</th>
-                <th>Type</th>
-                <th>Station & slot ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>BUS-CZ3-456</td>
-                <td>Regular</td>
-                <td><button>1 & 3</button></td>
-            </tr>
-            <tr>
-                <td>BUS-CZ3-456</td>
-                <td>Doubledecker</td>
-                <td><button>1 & 5</button></td>
-            </tr>
-            <tr>
-                <td>BUS-CZ3-456</td>
-                <td>MiniBus</td>
-                <td><button>2 & 2</button></td>
-            </tr>
-            <tr>
-                <td>BUS-CZ3-456</td>
-                <td>HybridBus</td>
-                <td><button>2 & 7</button></td>
-            </tr>
-        </tbody>
+  <mat-card-content>
+    <table mat-table [dataSource]="busList">
+      <ng-container matColumnDef="plateNumber">
+        <th mat-header-cell *matHeaderCellDef>Plate Number</th>
+        <td mat-cell *matCellDef="let element">{{ element.plateNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="busType">
+        <th mat-header-cell *matHeaderCellDef>Bus Type</th>
+        <td mat-cell *matCellDef="let element">{{ element.busType }}</td>
+      </ng-container>
+      <ng-container matColumnDef="stationAndSlot">
+        <th mat-header-cell *matHeaderCellDef>Station & Slot</th>
+        <td mat-cell *matCellDef="let element">{{ element.stationAndSlot }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div><a href="#1">1</a><a href="#2">2</a><a href="#3">3</a><a href="#14">...</a><a href="#15">15</a></div>
-</div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <mat-paginator
+      [length]="busList.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+    ></mat-paginator>
+  </mat-card-footer>
+</mat-card>
