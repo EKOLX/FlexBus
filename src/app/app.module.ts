@@ -11,9 +11,10 @@ import { ArrowSvg } from "./svg-assets/arrow.svg";
 import { HomeComponent } from './home/home.component';
 import { StationListComponent } from './station-list/station-list.component';
 import { BusListComponent } from './bus-list/bus-list.component';
+import { BusEditComponent } from './bus-list/bus-edit/bus-edit.component';
 
 @NgModule({
-  declarations: [AppComponent, LinkedinSvg, BusSvg, ArrowSvg, HomeComponent, StationListComponent, BusListComponent],
+  declarations: [AppComponent, LinkedinSvg, BusSvg, ArrowSvg, HomeComponent, StationListComponent, BusListComponent, BusEditComponent],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
