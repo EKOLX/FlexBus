@@ -1,6 +1,7 @@
+$toolbar-height: 60px;
+
 .toolbar {
-  height: 60px;
-  margin: -8px;
+  height: $toolbar-height;
   display: flex;
   align-items: center;
   background-color: #1976d2;
@@ -8,6 +9,8 @@
   font-weight: 600;
 
   img {
+    cursor: pointer;
+    width: 100px;
     margin: 0 16px;
   }
 }
@@ -18,4 +21,10 @@
 
 .container {
   padding: 30px 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
 }

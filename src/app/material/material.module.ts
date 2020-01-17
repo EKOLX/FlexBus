@@ -9,7 +9,11 @@ import * as Material from "@angular/material";
     Material.MatSelectModule,
     Material.MatTableModule,
     Material.MatCardModule,
-    Material.MatPaginatorModule
+    Material.MatPaginatorModule,
+    Material.MatSortModule,
+    Material.MatCheckboxModule,
+    Material.MatMenuModule,
+    Material.MatToolbarModule
   ],
   exports: [
     Material.MatDialogModule,
@@ -18,7 +22,11 @@ import * as Material from "@angular/material";
     Material.MatSelectModule,
     Material.MatTableModule,
     Material.MatCardModule,
-    Material.MatPaginatorModule
+    Material.MatPaginatorModule,
+    Material.MatSortModule,
+    Material.MatCheckboxModule,
+    Material.MatMenuModule,
+    Material.MatToolbarModule
   ]
 })
 export class MaterialModule {}
