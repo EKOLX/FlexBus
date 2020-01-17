@@ -1,13 +1,10 @@
-import { ModalType } from "../models/enums.model";
+import { ModalType, BusType } from "../models/enums.model";
+import { Bus } from "../models/bus.model";
 
-export class BusModalModel {
+export class BusModalViewModel {
   constructor(public modalType: ModalType) {}
 }
 
-export class BusDetailModel {
-  constructor(
-    public plateNumber: string,
-    public busType: number,
-    public stationAndSlot: string
-  ) {}
+export class BusViewModel extends Bus {
+  stationAndSlot: string;
 }

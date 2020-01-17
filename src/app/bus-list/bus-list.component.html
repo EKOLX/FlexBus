@@ -11,7 +11,14 @@
 
   <mat-card-actions>
     <button mat-stroked-button color="primary" (click)="onAdd()">Add</button>
-    <button mat-stroked-button color="warn" (click)="onEdit()">Edit</button>
+    <button
+      mat-stroked-button
+      color="warn"
+      (click)="onEdit()"
+      [disabled]="selection.selected.length == 0"
+    >
+      Edit
+    </button>
     <button
       mat-stroked-button
       color="accent"
@@ -75,7 +82,7 @@
 
   <mat-card-footer>
     <mat-paginator
-      [length]="busList.length"
+      [length]="busList.data.length"
       [pageSize]="5"
       [pageSizeOptions]="[5, 10, 25, 100]"
     ></mat-paginator>

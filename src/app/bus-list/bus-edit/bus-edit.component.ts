@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { BusType } from "../../models/bus.model";
-import { BusModalModel } from "src/app/viewModels/busView.model";
+import { BusModalViewModel } from "src/app/viewModels/busView.model";
 import { ModalType } from "src/app/models/enums.model";
+import { BusService } from "src/app/services/bus.service";
+import { busType } from "src/app/services/local.db";
 
 @Component({
   selector: "app-bus-edit",
@@ -10,19 +11,15 @@ import { ModalType } from "src/app/models/enums.model";
   styleUrls: ["./bus-edit.component.scss"]
 })
 export class BusEditComponent implements OnInit {
-  busTypes: Array<BusType> = [];
+  busTypes = [];
   title: string;
 
   constructor(
     public dialogRef: MatDialogRef<BusEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public viewModel: BusModalModel
+    @Inject(MAT_DIALOG_DATA) public viewModel: BusModalViewModel,
+    private busService: BusService
   ) {
-    this.busTypes = new Array(
-      { name: "Regular", value: 1 },
-      { name: "Doubledecker", value: 2 },
-      { name: "MiniBus", value: 3 },
-      { name: "HybridBus", value: 4 }
-    );
+    this.busTypes = busType;
   }
 
   ngOnInit() {
@@ -34,6 +31,7 @@ export class BusEditComponent implements OnInit {
 
   onSave(event: MouseEvent): void {
     event.preventDefault();
-    this.dialogRef.close("saved");
+    // TODO: save data
+    this.dialogRef.close(true);
   }
 }

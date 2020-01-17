@@ -1,0 +1,59 @@
+{
+  "buses": [
+    {
+      "id": 1,
+      "plateNumber": "BUS-ABC-001",
+      "busType": 1
+    },
+    {
+      "id": 2,
+      "plateNumber": "BUS-ABC-002",
+      "busType": 2
+    },
+    {
+      "id": 3,
+      "plateNumber": "BUS-ABC-003",
+      "busType": 3
+    },
+    {
+      "id": 4,
+      "plateNumber": "BUS-ABC-004",
+      "busType": 4
+    },
+    {
+      "id": 5,
+      "plateNumber": "BUS-ABC-005",
+      "busType": 1
+    },
+    {
+      "id": 6,
+      "plateNumber": "BUS-ABC-006",
+      "busType": 2
+    },
+    {
+      "id": 7,
+      "plateNumber": "BUS-ABC-007",
+      "busType": 2
+    },
+    {
+      "id": 8,
+      "plateNumber": "BUS-ABC-008",
+      "busType": 1
+    },
+    {
+      "id": 9,
+      "plateNumber": "BUS-ABC-009",
+      "busType": 4
+    },
+    {
+      "id": 10,
+      "plateNumber": "BUS-ABC-010",
+      "busType": 2
+    },
+    {
+      "id": 11,
+      "plateNumber": "BUS-ABC-011",
+      "busType": 1
+    }
+  ]
+}

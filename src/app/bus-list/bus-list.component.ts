@@ -8,66 +8,9 @@ import {
 import { MatPaginator } from "@angular/material/paginator";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ModalType } from "../models/enums.model";
-import { BusModalModel, BusDetailModel } from "../viewModels/busView.model";
+import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
-
-const dataSource = new Array(
-  {
-    plateNumber: "BUS-AZE-CZ1",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 1"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ2",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 2"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ3",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 4"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ4",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 6"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ5",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 7"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ6",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 12"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ7",
-    busType: 1,
-    stationAndSlot: "Station 1 @ Slot 17"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ8",
-    busType: 1,
-    stationAndSlot: "Station 2 @ Slot 2"
-  },
-  {
-    plateNumber: "BUS-AZE-CZ9",
-    busType: 1,
-    stationAndSlot: "Station 2 @ Slot 6"
-  },
-  {
-    plateNumber: "BUS-AZE-010",
-    busType: 1,
-    stationAndSlot: "Station 3 @ Slot 1"
-  },
-  {
-    plateNumber: "BUS-AZE-011",
-    busType: 1,
-    stationAndSlot: "Station 3 @ Slot 12"
-  }
-);
+import { BusService } from "../services/bus.service";
 
 @Component({
   selector: "app-bus-list",
@@ -75,59 +18,66 @@ const dataSource = new Array(
   styleUrls: ["./bus-list.component.scss"]
 })
 export class BusListComponent implements OnInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<BusDetailModel>;
+  @ViewChild(MatTable, { static: true }) table: MatTable<BusViewModel>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  busList: MatTableDataSource<BusDetailModel>;
+  busList: MatTableDataSource<BusViewModel> = new MatTableDataSource<
+    BusViewModel
+  >();
   displayedColumns: string[];
-  selection = new SelectionModel<BusDetailModel>(false, []);
+  selection = new SelectionModel<BusViewModel>(false, []);
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private busService: BusService) {
     this.displayedColumns = [
       "select",
       "plateNumber",
       "busType",
       "stationAndSlot"
     ];
-    this.busList = new MatTableDataSource<BusDetailModel>(dataSource);
   }
 
   ngOnInit() {
-    this.busList.paginator = this.paginator;
-    this.busList.sort = this.sort;
+    this.busService.getBuses().subscribe(
+      (data: BusViewModel[]) => {
+        this.busList = new MatTableDataSource<BusViewModel>(data);
+        this.busList.paginator = this.paginator;
+        this.busList.sort = this.sort;
+      },
+      error => console.log(error)
+    );
   }
 
   onAdd(): void {
     const dialogRef = this.dialog.open(BusEditComponent, {
       // TODO: make width responsive
       width: "500px",
-      data: new BusModalModel(ModalType.New)
+      data: new BusModalViewModel(ModalType.New)
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) console.log(result);
+      if (result) this.reloadDataSource();
     });
   }
 
   onEdit(): void {
-    this.dialog.open(BusEditComponent, {
+    const dialogRef = this.dialog.open(BusEditComponent, {
       // TODO: make width responsive
       width: "500px",
-      data: new BusModalModel(ModalType.Edit)
+      data: new BusModalViewModel(ModalType.Edit)
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.reloadDataSource();
     });
   }
 
   Delete(): void {
     const selected = this.selection.selected[0];
     if (selected) {
-      const index = dataSource.findIndex(
-        b => b.plateNumber === selected.plateNumber
+      // TODO: Refactor callbacks hell
+      this.busService.removeBus(selected.id).subscribe(
+        () => this.reloadDataSource(),
+        error => console.log(error)
       );
-      dataSource.splice(index, 1);
-
-      this.busList.data = dataSource;
-      this.table.renderRows();
-      this.selection.clear();
     }
   }
 
@@ -135,9 +85,20 @@ export class BusListComponent implements OnInit {
     this.busList.filter = filterValue.trim().toLowerCase();
   }
 
-  checkboxLabel(row: BusDetailModel): string {
+  checkboxLabel(row: BusViewModel): string {
     if (row) {
       return `${this.selection.isSelected(row) ? "deselect" : "select"} row`;
     }
+  }
+
+  private reloadDataSource(): void {
+    this.busService.getBuses().subscribe(
+      (data: BusViewModel[]) => {
+        this.busList.data = data;
+        this.table.renderRows();
+        this.selection.clear();
+      },
+      error => console.log(error)
+    );
   }
 }
