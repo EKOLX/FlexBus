@@ -1,3 +1,15 @@
 mat-form-field:not(:last-child) {
   margin-right: 10px;
 }
+
+.overlay,
+mat-spinner {
+  position: fixed;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: visible;
+}

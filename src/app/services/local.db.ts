@@ -6,3 +6,10 @@ export const busTypes = new Array(
   { name: BusType[BusType.MiniBus], value: BusType.MiniBus },
   { name: BusType[BusType.HybridBus], value: BusType.HybridBus }
 );
+
+export const busTableColumns = [
+  "select",
+  "plateNumber",
+  "busType",
+  "stationAndSlot"
+];

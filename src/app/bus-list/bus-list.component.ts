@@ -11,6 +11,7 @@ import { ModalType, BusType } from "../models/enums.model";
 import { Bus } from "../models/bus.model";
 import { Station, StationSlot } from "../models/station.model";
 import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
+import { busTableColumns } from "src/app/services/local.db";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
 import { BusService } from "../services/bus.service";
 
@@ -27,19 +28,59 @@ export class BusListComponent implements OnInit {
   busList: MatTableDataSource<BusViewModel> = new MatTableDataSource<
     BusViewModel
   >();
-  displayedColumns: string[];
+  displayedColumns: string[] = busTableColumns;
   selection = new SelectionModel<BusViewModel>(false, []);
 
-  constructor(public dialog: MatDialog, private busService: BusService) {
-    this.displayedColumns = [
-      "select",
-      "plateNumber",
-      "busType",
-      "stationAndSlot"
-    ];
-  }
+  constructor(public dialog: MatDialog, private busService: BusService) {}
 
   ngOnInit() {
+    this.loadDataSource();
+  }
+
+  onAdd(): void {
+    const dialogRef = this.dialog.open(BusEditComponent, {
+      // TODO: make width responsive
+      width: "500px",
+      data: new BusModalViewModel(ModalType.New)
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadDataSource();
+    });
+  }
+
+  onEdit(): void {
+    const dialogRef = this.dialog.open(BusEditComponent, {
+      // TODO: make width responsive
+      width: "500px",
+      data: new BusModalViewModel(ModalType.Edit)
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadDataSource();
+    });
+  }
+
+  Delete(): void {
+    const selected = this.selection.selected[0];
+    if (selected) {
+      // TODO: Refactor callbacks hell
+      this.busService.removeBus(selected.id).subscribe(
+        () => this.loadDataSource(),
+        error => console.log(error)
+      );
+    }
+  }
+
+  applyFilter(filterValue: string): void {
+    this.busList.filter = filterValue.trim().toLowerCase();
+  }
+
+  checkboxLabel(row: BusViewModel): string {
+    if (row) {
+      return `${this.selection.isSelected(row) ? "deselect" : "select"} row`;
+    }
+  }
+
+  private loadDataSource(): void {
     this.busService.getBuses().subscribe(
       (data: [Bus[], Station[], StationSlot[]]) => {
         const dataSource = data[0].map(b => {
@@ -62,60 +103,6 @@ export class BusListComponent implements OnInit {
         this.busList = new MatTableDataSource<BusViewModel>(dataSource);
         this.busList.paginator = this.paginator;
         this.busList.sort = this.sort;
-      },
-      error => console.log(error)
-    );
-  }
-
-  onAdd(): void {
-    const dialogRef = this.dialog.open(BusEditComponent, {
-      // TODO: make width responsive
-      width: "500px",
-      data: new BusModalViewModel(ModalType.New)
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.reloadDataSource();
-    });
-  }
-
-  onEdit(): void {
-    const dialogRef = this.dialog.open(BusEditComponent, {
-      // TODO: make width responsive
-      width: "500px",
-      data: new BusModalViewModel(ModalType.Edit)
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.reloadDataSource();
-    });
-  }
-
-  Delete(): void {
-    const selected = this.selection.selected[0];
-    if (selected) {
-      // TODO: Refactor callbacks hell
-      this.busService.removeBus(selected.id).subscribe(
-        () => this.reloadDataSource(),
-        error => console.log(error)
-      );
-    }
-  }
-
-  applyFilter(filterValue: string): void {
-    this.busList.filter = filterValue.trim().toLowerCase();
-  }
-
-  checkboxLabel(row: BusViewModel): string {
-    if (row) {
-      return `${this.selection.isSelected(row) ? "deselect" : "select"} row`;
-    }
-  }
-
-  private reloadDataSource(): void {
-    this.busService.getBuses().subscribe(
-      (data: BusViewModel[]) => {
-        this.busList.data = data;
-        this.table.renderRows();
-        this.selection.clear();
       },
       error => console.log(error)
     );

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, forkJoin } from "rxjs";
 import { tap, map, mergeMap } from "rxjs/operators";
 import { Bus } from "../models/bus.model";
+import { Station, StationSlot } from "../models/station.model";
 import { BusViewModel } from "../viewModels/busView.model";
 import { StationService } from "./station.service";
 
@@ -20,13 +21,14 @@ export class BusService {
     private stationService: StationService
   ) {}
 
-  getBuses(): Observable<any> {
+  getBuses(): Observable<[Bus[], Station[], StationSlot[]]> {
     const buses = this.http.get<Bus[]>(
       `${this.jsonServerApi}/buses`,
       this.httpOptions
     );
     const stations = this.stationService.getStations();
     const stationSlots = this.stationService.getStationSlots();
+
     return forkJoin(buses, stations, stationSlots);
   }
 

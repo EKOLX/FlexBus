@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { Station, StationSlot } from "../models/station.model";
 
 @Injectable({

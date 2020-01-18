@@ -13,7 +13,8 @@ import * as Material from "@angular/material";
     Material.MatSortModule,
     Material.MatCheckboxModule,
     Material.MatMenuModule,
-    Material.MatToolbarModule
+    Material.MatToolbarModule,
+    Material.MatProgressSpinnerModule
   ],
   exports: [
     Material.MatDialogModule,
@@ -26,7 +27,8 @@ import * as Material from "@angular/material";
     Material.MatSortModule,
     Material.MatCheckboxModule,
     Material.MatMenuModule,
-    Material.MatToolbarModule
+    Material.MatToolbarModule,
+    Material.MatProgressSpinnerModule
   ]
 })
 export class MaterialModule {}
