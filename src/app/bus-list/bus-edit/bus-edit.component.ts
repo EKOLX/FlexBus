@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { BusModalViewModel } from "src/app/viewModels/busView.model";
 import { ModalType } from "src/app/models/enums.model";
 import { BusService } from "src/app/services/bus.service";
-import { busType } from "src/app/services/local.db";
+import { busTypes } from "src/app/services/local.db";
 
 @Component({
   selector: "app-bus-edit",
@@ -19,7 +19,7 @@ export class BusEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public viewModel: BusModalViewModel,
     private busService: BusService
   ) {
-    this.busTypes = busType;
+    this.busTypes = busTypes;
   }
 
   ngOnInit() {

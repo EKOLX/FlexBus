@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { Observable, forkJoin } from "rxjs";
+import { tap, map, mergeMap } from "rxjs/operators";
+import { Bus } from "../models/bus.model";
 import { BusViewModel } from "../viewModels/busView.model";
+import { StationService } from "./station.service";
 
 @Injectable({
   providedIn: "root"
@@ -13,13 +15,19 @@ export class BusService {
     headers: new HttpHeaders({ "Content-Type": "application/json" })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private stationService: StationService
+  ) {}
 
-  getBuses(): Observable<BusViewModel[]> {
-    return this.http.get<BusViewModel[]>(
+  getBuses(): Observable<any> {
+    const buses = this.http.get<Bus[]>(
       `${this.jsonServerApi}/buses`,
       this.httpOptions
     );
+    const stations = this.stationService.getStations();
+    const stationSlots = this.stationService.getStationSlots();
+    return forkJoin(buses, stations, stationSlots);
   }
 
   saveBus(bus: BusViewModel): Observable<BusViewModel> {

@@ -1,4 +1,4 @@
-import { ModalType, BusType } from "../models/enums.model";
+import { ModalType } from "../models/enums.model";
 import { Bus } from "../models/bus.model";
 
 export class BusModalViewModel {
@@ -6,5 +6,12 @@ export class BusModalViewModel {
 }
 
 export class BusViewModel extends Bus {
-  stationAndSlot: string;
+  constructor(
+    id: number,
+    plateNumber: string,
+    busType: string,
+    public stationAndSlot: string
+  ) {
+    super(id, plateNumber, busType);
+  }
 }

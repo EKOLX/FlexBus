@@ -7,7 +7,9 @@ import {
 } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { SelectionModel } from "@angular/cdk/collections";
-import { ModalType } from "../models/enums.model";
+import { ModalType, BusType } from "../models/enums.model";
+import { Bus } from "../models/bus.model";
+import { Station, StationSlot } from "../models/station.model";
 import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
 import { BusService } from "../services/bus.service";
@@ -39,8 +41,25 @@ export class BusListComponent implements OnInit {
 
   ngOnInit() {
     this.busService.getBuses().subscribe(
-      (data: BusViewModel[]) => {
-        this.busList = new MatTableDataSource<BusViewModel>(data);
+      (data: [Bus[], Station[], StationSlot[]]) => {
+        const dataSource = data[0].map(b => {
+          let stationAndSlot: string = "";
+          const busSlot = data[2].find(sl => sl.busId === b.id);
+
+          if (busSlot) {
+            const station = data[1].find(s => s.id === busSlot.stationId);
+            stationAndSlot = `${station.name} @ slot: ${busSlot.id}`;
+          }
+
+          return new BusViewModel(
+            b.id,
+            b.plateNumber,
+            BusType[b.busType],
+            stationAndSlot
+          );
+        });
+
+        this.busList = new MatTableDataSource<BusViewModel>(dataSource);
         this.busList.paginator = this.paginator;
         this.busList.sort = this.sort;
       },
