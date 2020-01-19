@@ -1,5 +1,14 @@
+mat-dialog-actions {
+  margin: 0;
+  padding: 0;
+}
+
 mat-form-field:not(:last-child) {
   margin-right: 10px;
+}
+
+section {
+  margin-bottom: 10px;
 }
 
 .overlay,

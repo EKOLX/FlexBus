@@ -1,3 +1,4 @@
+import { HttpHeaders } from "@angular/common/http";
 import { BusType } from "../models/enums.model";
 
 export const busTypes = new Array(
@@ -13,3 +14,10 @@ export const busTableColumns = [
   "busType",
   "stationAndSlot"
 ];
+
+export const httpConfigs = {
+  serverApi: "http://localhost:3000",
+  options: {
+    headers: new HttpHeaders({ "Content-Type": "application/json" })
+  }
+};

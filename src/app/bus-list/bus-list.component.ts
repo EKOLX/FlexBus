@@ -13,6 +13,7 @@ import { Station, StationSlot } from "../models/station.model";
 import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
 import { busTableColumns } from "src/app/services/local.db";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
+import { CommonService } from "../services/common.service";
 import { BusService } from "../services/bus.service";
 
 @Component({
@@ -31,32 +32,22 @@ export class BusListComponent implements OnInit {
   displayedColumns: string[] = busTableColumns;
   selection = new SelectionModel<BusViewModel>(false, []);
 
-  constructor(public dialog: MatDialog, private busService: BusService) {}
+  constructor(
+    public dialog: MatDialog,
+    private commonService: CommonService,
+    private busService: BusService
+  ) {}
 
   ngOnInit() {
     this.loadDataSource();
   }
 
   onAdd(): void {
-    const dialogRef = this.dialog.open(BusEditComponent, {
-      // TODO: make width responsive
-      width: "500px",
-      data: new BusModalViewModel(ModalType.New)
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadDataSource();
-    });
+    this.launchDialog(ModalType.New);
   }
 
   onEdit(): void {
-    const dialogRef = this.dialog.open(BusEditComponent, {
-      // TODO: make width responsive
-      width: "500px",
-      data: new BusModalViewModel(ModalType.Edit)
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadDataSource();
-    });
+    this.launchDialog(ModalType.Edit);
   }
 
   Delete(): void {
@@ -81,7 +72,7 @@ export class BusListComponent implements OnInit {
   }
 
   private loadDataSource(): void {
-    this.busService.getBuses().subscribe(
+    this.commonService.getBusesStationSlots().subscribe(
       (data: [Bus[], Station[], StationSlot[]]) => {
         const dataSource = data[0].map(b => {
           let stationAndSlot: string = "";
@@ -106,5 +97,16 @@ export class BusListComponent implements OnInit {
       },
       error => console.log(error)
     );
+  }
+
+  private launchDialog(modalType: ModalType): void {
+    const dialogRef = this.dialog.open(BusEditComponent, {
+      // TODO: make width responsive
+      width: "500px",
+      data: new BusModalViewModel(modalType)
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadDataSource();
+    });
   }
 }

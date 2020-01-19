@@ -1,37 +1,64 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, forkJoin } from "rxjs";
+import { Observable } from "rxjs";
+import { httpConfigs } from "./local.db";
 import { Station, StationSlot } from "../models/station.model";
 
 @Injectable({
   providedIn: "root"
 })
 export class StationService {
-  private jsonServerApi = "http://localhost:3000";
-  private httpOptions = {
-    headers: new HttpHeaders({ "Content-Type": "application/json" })
-  };
-
   constructor(private http: HttpClient) {}
 
   getStations(): Observable<Station[]> {
     return this.http.get<Station[]>(
-      `${this.jsonServerApi}/stations`,
-      this.httpOptions
+      `${httpConfigs.serverApi}/stations`,
+      httpConfigs.options
     );
   }
 
   getStationById(id: number): Observable<Station> {
     return this.http.get<Station>(
-      `${this.jsonServerApi}/stations/${id}`,
-      this.httpOptions
+      `${httpConfigs.serverApi}/stations/${id}`,
+      httpConfigs.options
     );
   }
 
   getStationSlots(): Observable<StationSlot[]> {
     return this.http.get<StationSlot[]>(
-      `${this.jsonServerApi}/stationSlots`,
-      this.httpOptions
+      `${httpConfigs.serverApi}/stationSlots`,
+      httpConfigs.options
+    );
+  }
+
+  getStationSlotById(id: number): Observable<StationSlot> {
+    return this.http.get<StationSlot>(
+      `${httpConfigs.serverApi}/stationSlots/${id}`,
+      httpConfigs.options
+    );
+  }
+
+  saveStation(station: Station): Observable<Station> {
+    return this.http.post<Station>(
+      `${httpConfigs.serverApi}/stations`,
+      station,
+      httpConfigs.options
+    );
+  }
+
+  saveStationSlot(slot: StationSlot): Observable<StationSlot> {
+    if (slot.id === 0) {
+      return this.http.post<StationSlot>(
+        `${httpConfigs.serverApi}/stationSlots`,
+        slot,
+        httpConfigs.options
+      );
+    }
+
+    return this.http.put<StationSlot>(
+      `${httpConfigs.serverApi}/stationSlots/${slot.id}`,
+      slot,
+      httpConfigs.options
     );
   }
 }

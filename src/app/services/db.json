@@ -54,18 +54,65 @@
       "id": 11,
       "plateNumber": "BUS-ABC-011",
       "busType": 1
+    },
+    {
+      "id": 12,
+      "plateNumber": "BUS-AZE-001",
+      "busType": 1
+    },
+    {
+      "id": 13,
+      "plateNumber": "BUS-AZE-002",
+      "busType": 3
+    },
+    {
+      "id": 14,
+      "plateNumber": "BUS-AZE-003",
+      "busType": 2
     }
   ],
   "stations": [
-    { "id": 1, "name": "Central Bus Station 1", "slotsNumber": 12 },
-    { "id": 2, "name": "Central Bus Station 2", "slotsNumber": 17 },
-    { "id": 3, "name": "Central Bus Station 3", "slotsNumber": 23 }
+    {
+      "id": 1,
+      "name": "Central Bus Station 1",
+      "slotsNumber": 12
+    },
+    {
+      "id": 2,
+      "name": "Central Bus Station 2",
+      "slotsNumber": 17
+    },
+    {
+      "id": 3,
+      "name": "Central Bus Station 3",
+      "slotsNumber": 23
+    }
   ],
   "stationSlots": [
-    { "id": 1, "stationId": 1, "busId": 1 },
-    { "id": 2, "stationId": 1, "busId": null },
-    { "id": 3, "stationId": 2, "busId": 2 },
-    { "id": 4, "stationId": 1, "busId": null },
-    { "id": 5, "stationId": 3, "busId": 3 }
+    {
+      "id": 1,
+      "stationId": 1,
+      "busId": 14
+    },
+    {
+      "id": 2,
+      "stationId": 1,
+      "busId": 12
+    },
+    {
+      "id": 3,
+      "stationId": 2,
+      "busId": 2
+    },
+    {
+      "id": 4,
+      "stationId": 1,
+      "busId": 13
+    },
+    {
+      "id": 5,
+      "stationId": 3,
+      "busId": 3
+    }
   ]
 }
