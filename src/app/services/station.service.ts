@@ -41,6 +41,7 @@ export class StationService {
   saveStation(station: Station): Observable<Station> {
     if (station.id === 0) {
       console.info("Adding new station");
+
       return this.http.post<Station>(
         `${httpConfigs.serverApi}/stations`,
         station,
@@ -59,6 +60,7 @@ export class StationService {
   saveStationSlot(slot: StationSlot): Observable<StationSlot> {
     if (slot.id === 0) {
       console.info("Adding new slot");
+
       return this.http.post<StationSlot>(
         `${httpConfigs.serverApi}/stationSlots`,
         slot,
@@ -67,6 +69,7 @@ export class StationService {
     }
 
     console.info("Updating existing slot");
+
     return this.http.put<StationSlot>(
       `${httpConfigs.serverApi}/stationSlots/${slot.id}`,
       slot,
@@ -77,6 +80,15 @@ export class StationService {
   deleteStation(id: number): Observable<void> {
     return this.http.delete<void>(
       `${httpConfigs.serverApi}/stations/${id}`,
+      httpConfigs.options
+    );
+  }
+
+  removeStationSlot(id: number): Observable<{}> {
+    console.info("Deleting slot");
+
+    return this.http.delete(
+      `${httpConfigs.serverApi}/stationSlots/${id}`,
       httpConfigs.options
     );
   }

@@ -30,7 +30,7 @@ export class BusService {
     );
   }
 
-  deleteBus(id: number): Observable<{}> {
+  removeBus(id: number): Observable<{}> {
     return this.http.delete(
       `${httpConfigs.serverApi}/buses/${id}`,
       httpConfigs.options

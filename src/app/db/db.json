@@ -2,27 +2,47 @@
   "buses": [
     {
       "id": 1,
-      "plateNumber": "BUS-ABC-001",
-      "busType": 1
-    },
-    {
-      "id": 2,
-      "plateNumber": "BUS-ABC-002",
-      "busType": 2
-    },
-    {
-      "id": 3,
-      "plateNumber": "BUS-ABC-003",
+      "plateNumber": "BUS-AZE-001",
       "busType": 3
     },
     {
+      "id": 2,
+      "plateNumber": "BUS-GER-001",
+      "busType": 1
+    },
+    {
+      "id": 3,
+      "plateNumber": "BUS-GER-002",
+      "busType": 2
+    },
+    {
       "id": 4,
-      "plateNumber": "BUS-ABC-004",
-      "busType": 4
+      "plateNumber": "BUS-GER-003",
+      "busType": 1
     },
     {
       "id": 5,
-      "plateNumber": "BUS-ABC-006",
+      "plateNumber": "BUS-004-GER",
+      "busType": 1
+    },
+    {
+      "id": 6,
+      "plateNumber": "BUS-GE0-R01",
+      "busType": 1
+    },
+    {
+      "id": 7,
+      "plateNumber": "BUS-GER-004",
+      "busType": 2
+    },
+    {
+      "id": 8,
+      "plateNumber": "BUS-GER-006",
+      "busType": 1
+    },
+    {
+      "id": 9,
+      "plateNumber": "BUS-GER-005",
       "busType": 1
     }
   ],
@@ -30,7 +50,7 @@
     {
       "id": 1,
       "name": "Frankfurt bus station",
-      "slotsNumber": 50
+      "slotsNumber": 6
     },
     {
       "id": 2,
@@ -62,32 +82,50 @@
     {
       "id": 1,
       "slotNumber": 1,
-      "stationId": 1,
+      "stationId": 5,
       "busId": 1
     },
     {
       "id": 2,
-      "slotNumber": 2,
+      "slotNumber": 1,
       "stationId": 1,
       "busId": 2
     },
     {
       "id": 3,
-      "slotNumber": 3,
+      "slotNumber": 2,
       "stationId": 1,
       "busId": 3
     },
     {
       "id": 4,
-      "slotNumber": 4,
+      "slotNumber": 3,
       "stationId": 1,
-      "busId": 4
+      "busId": 5
     },
     {
       "id": 5,
+      "slotNumber": 4,
+      "stationId": 1,
+      "busId": 6
+    },
+    {
+      "id": 6,
+      "slotNumber": 5,
+      "stationId": 1,
+      "busId": 7
+    },
+    {
+      "id": 7,
+      "slotNumber": 6,
+      "stationId": 1,
+      "busId": 8
+    },
+    {
+      "id": 8,
       "slotNumber": 1,
       "stationId": 2,
-      "busId": 5
+      "busId": 9
     }
   ]
 }

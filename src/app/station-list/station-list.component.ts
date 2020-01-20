@@ -58,7 +58,7 @@ export class StationListComponent implements OnInit {
   }
 
   onDblClick(row: Station): void {
-    this.selection.toggle(row);
+    this.selection.hasValue() ? null : this.selection.toggle(row);
     this.onEdit();
     this.selection.clear();
   }
@@ -92,7 +92,7 @@ export class StationListComponent implements OnInit {
       data: data
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result.toDelete) {
         const selected = this.selection.selected[0];
         if (selected) {
           this.stationService.deleteStation(selected.id).subscribe(() => {

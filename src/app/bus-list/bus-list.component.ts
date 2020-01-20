@@ -66,7 +66,7 @@ export class BusListComponent implements OnInit {
   }
 
   onDblClick(row: BusViewModel): void {
-    this.selection.toggle(row);
+    this.selection.hasValue() ? null : this.selection.toggle(row);
     this.onEdit();
     this.selection.clear();
   }
@@ -99,9 +99,9 @@ export class BusListComponent implements OnInit {
             b.plateNumber,
             b.busType,
             BusType[b.busType],
-            busSlot.stationId,
-            busSlot.id,
-            busSlot.slotNumber,
+            busSlot ? busSlot.stationId : null,
+            busSlot ? busSlot.id : null,
+            busSlot ? busSlot.slotNumber : null,
             stationAndSlot
           );
         });
@@ -133,17 +133,25 @@ export class BusListComponent implements OnInit {
       data: data
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result.toDelete) {
         const selected = this.selection.selected[0];
         if (selected) {
-          this.busService.deleteBus(selected.id).subscribe(
-            () => {
-              console.info("Bus deleted");
-              this.loadDataSource();
-              this.selection.clear();
-            },
-            error => console.log(error)
-          );
+          this.commonService
+            .removeBusAndSlot(selected.id, selected.slotId)
+            .subscribe(
+              () => {
+                console.info("Bus and slot deleted");
+                this.loadDataSource();
+                this.selection.clear();
+              },
+              error => {
+                // NOTE: json-server throws error in spite of deletes the row
+                // so anyway continue adding
+                console.log(error);
+                this.loadDataSource();
+                this.selection.clear();
+              }
+            );
         }
       } else this.selection.clear();
     });

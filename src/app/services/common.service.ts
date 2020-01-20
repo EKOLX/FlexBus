@@ -44,12 +44,11 @@ export class CommonService {
     console.info("Starting generating new slots");
     return forkJoin(stationSlots);
   }
-}
 
-/*
-(station: Station) => {
-        for (let i = 1; i <= station.slotsNumber; i++) {
-          this.stationService.saveStationSlot(new StationSlot(0, station.id));
-        }
-      }
-*/
+  removeBusAndSlot(busId: number, slotId: number): Observable<[{}, {}]> {
+    const bus = this.busService.removeBus(busId);
+    const slot = this.stationService.removeStationSlot(slotId);
+
+    return forkJoin(bus, slot);
+  }
+}

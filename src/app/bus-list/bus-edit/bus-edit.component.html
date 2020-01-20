@@ -4,20 +4,13 @@
   <div mat-dialog-content>
     <section>
       <mat-form-field>
-        <input
-          matInput
-          type="text"
-          placeholder="Plate number"
-          formControlName="plateNumber"
-        />
-        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.wrongFormat"
-          >Format of BUS-XXX-XXX where X is an alpha-numeric
-          character</mat-error
-        >
-        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.isExist"
-          >Bus with plate number {{ plateNumber.value }} is already
-          exist</mat-error
-        >
+        <input matInput type="text" placeholder="Plate number" formControlName="plateNumber" />
+        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.wrongFormat">Format of BUS-XXX-XXX where X is an
+          alpha-numeric
+          character</mat-error>
+        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.isExist">Bus with plate number
+          {{ plateNumber.value }} is already
+          exist</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -34,33 +27,22 @@
       <mat-form-field>
         <mat-label>Station</mat-label>
         <mat-select formControlName="stationId">
+          <mat-option>None</mat-option>
           <mat-option *ngFor="let station of stations" [value]="station.id">
             {{ station.name }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="stationId.invalid"
-          >For selected station there are no available parking slots</mat-error
-        >
+        <mat-error *ngIf="stationId.invalid">For selected station there are no available parking slots</mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input
-          matInput
-          type="number"
-          placeholder="Parking slot"
-          formControlName="slotNumber"
-        />
+        <input matInput type="number" placeholder="Parking slot" formControlName="slotNumber" />
       </mat-form-field>
     </section>
   </div>
 
   <mat-dialog-actions>
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="busForm.invalid"
-    >
+    <button type="submit" mat-raised-button color="primary" [disabled]="busForm.invalid">
       Save
     </button>
     <button mat-raised-button mat-dialog-close>Cancel</button>
