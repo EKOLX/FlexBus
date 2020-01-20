@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { tap, map, mergeMap } from "rxjs/operators";
-import { httpConfigs } from "./local.db";
+import { httpConfigs } from "../db/local.db";
 import { Bus } from "../models/bus.model";
 import { StationService } from "./station.service";
 
@@ -30,7 +30,7 @@ export class BusService {
     );
   }
 
-  removeBus(id: number): Observable<{}> {
+  deleteBus(id: number): Observable<{}> {
     return this.http.delete(
       `${httpConfigs.serverApi}/buses/${id}`,
       httpConfigs.options

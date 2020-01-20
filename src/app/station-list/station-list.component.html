@@ -1,79 +1,75 @@
-<div>
-    <h2>Station list</h2>
-    <div>
-        <button>Add</button><button>Edit</button><button>Delete</button>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Parking slots</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>12</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>23</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>17</td>
-            </tr>
-        </tbody>
+<section>
+  <button mat-icon-button routerLink="/">Home</button>
+  -
+  <button mat-icon-button disabled>Station List</button>
+</section>
+
+<br />
+
+<mat-card>
+  <mat-card-title>Station List</mat-card-title>
+
+  <mat-card-actions>
+    <button mat-stroked-button color="primary" (click)="onAdd()">Add</button>
+    <button
+      mat-stroked-button
+      color="warn"
+      (click)="onEdit()"
+      [disabled]="selection.selected.length == 0"
+    >
+      Edit
+    </button>
+    <button
+      mat-stroked-button
+      color="accent"
+      (click)="onDelete()"
+      [disabled]="selection.selected.length == 0"
+    >
+      Delete
+    </button>
+  </mat-card-actions>
+
+  <mat-card-content>
+    <table mat-table matSort [dataSource]="stationList">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+          ></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="slotsNumber">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Parking slots</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.slotsNumber }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (dblclick)="onDblClick(row)"
+      ></tr>
     </table>
-</div>
+  </mat-card-content>
 
-<div>
-    <h2>Update Station</h2>
-    <input type="number" id="id" value="1" />
-    <input type="number" id="slotCount" value="12" />
-    <button>View slots</button>
-    <div>
-        <button>Save</button>
-        <button>Cancel</button>
-    </div>
-</div>
-
-<div>
-    <h2>Slots</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Plate number</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>BUS-CZ3-456</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>BUS-456-AZE</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>BUS-789-123</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>&lt;&lt;Empty&gt;&gt;</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div>
-    <h2>Update Slot</h2>
-    <input type="number" id="id" value="1" />
-    <input type="text" id="plateNumber" value="BUS-123-456" />
-    <div>
-        <button>Save</button>
-        <button>Cancel</button>
-    </div>
-</div>
+  <mat-card-footer>
+    <mat-paginator
+      [length]="stationList.data.length"
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+    ></mat-paginator>
+  </mat-card-footer>
+</mat-card>

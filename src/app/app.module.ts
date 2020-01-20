@@ -11,19 +11,27 @@ import { SvgAssetsModule } from "./svg-assets/svg-assets.module";
 
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
-import { StationListComponent } from "./station-list/station-list.component";
 import { BusListComponent } from "./bus-list/bus-list.component";
 import { BusEditComponent } from "./bus-list/bus-edit/bus-edit.component";
+import { StationListComponent } from "./station-list/station-list.component";
+import { StationEditComponent } from "./station-list/station-edit/station-edit.component";
+import { ConfirmationComponent } from "./shared/confirmation/confirmation.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    StationListComponent,
     BusListComponent,
-    BusEditComponent
+    BusEditComponent,
+    StationListComponent,
+    StationEditComponent,
+    ConfirmationComponent
   ],
-  entryComponents: [BusEditComponent],
+  entryComponents: [
+    BusEditComponent,
+    StationEditComponent,
+    ConfirmationComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

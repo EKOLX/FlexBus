@@ -15,6 +15,8 @@ export const busTableColumns = [
   "stationAndSlot"
 ];
 
+export const stationTableColumns = ["select", "name", "slotsNumber"];
+
 export const httpConfigs = {
   serverApi: "http://localhost:3000",
   options: {

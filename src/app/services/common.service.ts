@@ -5,6 +5,7 @@ import { Bus } from "../models/bus.model";
 import { Station, StationSlot } from "../models/station.model";
 import { BusService } from "./bus.service";
 import { StationService } from "./station.service";
+import { tap, map, concatMap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +17,7 @@ export class CommonService {
     private stationService: StationService
   ) {}
 
-  getBusesStationSlots(): Observable<[Bus[], Station[], StationSlot[]]> {
+  getBusesStationsSlots(): Observable<[Bus[], Station[], StationSlot[]]> {
     const buses = this.busService.getBuses();
     const stations = this.stationService.getStations();
     const stationSlots = this.stationService.getStationSlots();
@@ -24,15 +25,31 @@ export class CommonService {
     return forkJoin(buses, stations, stationSlots);
   }
 
-  saveBuseStationSlot(
-    bus: Bus,
-    station: Station,
-    slot: StationSlot
-  ): Observable<[Bus, Station, StationSlot]> {
-    const buses = this.busService.saveBus(bus);
-    const stations = this.stationService.saveStation(station);
-    const stationSlots = this.stationService.saveStationSlot(slot);
+  getStationWithSlots(stationId: number): Observable<[Station, StationSlot[]]> {
+    const station = this.stationService.getStationById(stationId);
+    const stationSlots = this.stationService.getStationSlots();
 
-    return forkJoin(buses, stations, stationSlots);
+    return forkJoin(station, stationSlots);
+  }
+
+  generateSlots(stationId: number, slotCount: number): Observable<any> {
+    const stationSlots = [];
+    for (let slot = 1; slot <= slotCount; slot++) {
+      const stationSlot = this.stationService.saveStationSlot(
+        new StationSlot(0, slot, stationId, null)
+      );
+      stationSlots.push(stationSlot);
+    }
+
+    console.info("Starting generating new slots");
+    return forkJoin(stationSlots);
   }
 }
+
+/*
+(station: Station) => {
+        for (let i = 1; i <= station.slotsNumber; i++) {
+          this.stationService.saveStationSlot(new StationSlot(0, station.id));
+        }
+      }
+*/

@@ -1,0 +1,93 @@
+{
+  "buses": [
+    {
+      "id": 1,
+      "plateNumber": "BUS-ABC-001",
+      "busType": 1
+    },
+    {
+      "id": 2,
+      "plateNumber": "BUS-ABC-002",
+      "busType": 2
+    },
+    {
+      "id": 3,
+      "plateNumber": "BUS-ABC-003",
+      "busType": 3
+    },
+    {
+      "id": 4,
+      "plateNumber": "BUS-ABC-004",
+      "busType": 4
+    },
+    {
+      "id": 5,
+      "plateNumber": "BUS-ABC-006",
+      "busType": 1
+    }
+  ],
+  "stations": [
+    {
+      "id": 1,
+      "name": "Frankfurt bus station",
+      "slotsNumber": 50
+    },
+    {
+      "id": 2,
+      "name": "Berlin bus station",
+      "slotsNumber": 72
+    },
+    {
+      "id": 3,
+      "name": "Prague bus station",
+      "slotsNumber": 35
+    },
+    {
+      "id": 4,
+      "name": "Munich bus station",
+      "slotsNumber": 42
+    },
+    {
+      "id": 5,
+      "name": "Baku bus station",
+      "slotsNumber": 28
+    },
+    {
+      "id": 6,
+      "name": "Amsterdam bus station",
+      "slotsNumber": 87
+    }
+  ],
+  "stationSlots": [
+    {
+      "id": 1,
+      "slotNumber": 1,
+      "stationId": 1,
+      "busId": 1
+    },
+    {
+      "id": 2,
+      "slotNumber": 2,
+      "stationId": 1,
+      "busId": 2
+    },
+    {
+      "id": 3,
+      "slotNumber": 3,
+      "stationId": 1,
+      "busId": 3
+    },
+    {
+      "id": 4,
+      "slotNumber": 4,
+      "stationId": 1,
+      "busId": 4
+    },
+    {
+      "id": 5,
+      "slotNumber": 1,
+      "stationId": 2,
+      "busId": 5
+    }
+  ]
+}

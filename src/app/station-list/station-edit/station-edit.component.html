@@ -1,0 +1,45 @@
+<form #stationForm="ngForm" (ngSubmit)="onSubmit()">
+  <h2 mat-dialog-title>{{ title }}</h2>
+
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="name"
+        [(ngModel)]="viewModel.station.name"
+        placeholder="Station name"
+        required
+      />
+      <!-- <mat-error *ngIf="name.invalid"></mat-error> -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        name="slotsNumber"
+        [(ngModel)]="viewModel.station.slotsNumber"
+        placeholder="Slots number"
+        required
+      />
+      <!-- <mat-error *ngIf="slotsNumber.invalid"></mat-error> -->
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-actions>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="stationForm.invalid"
+    >
+      Save
+    </button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</form>
+
+<div class="overlay" *ngIf="isBusy">
+  <mat-spinner></mat-spinner>
+</div>

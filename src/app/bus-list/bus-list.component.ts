@@ -11,10 +11,11 @@ import { ModalType, BusType } from "../models/enums.model";
 import { Bus } from "../models/bus.model";
 import { Station, StationSlot } from "../models/station.model";
 import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
-import { busTableColumns } from "src/app/services/local.db";
+import { busTableColumns } from "src/app/db/local.db";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
 import { CommonService } from "../services/common.service";
 import { BusService } from "../services/bus.service";
+import { ConfirmationComponent } from "../shared/confirmation/confirmation.component";
 
 @Component({
   selector: "app-bus-list",
@@ -29,8 +30,8 @@ export class BusListComponent implements OnInit {
   busList: MatTableDataSource<BusViewModel> = new MatTableDataSource<
     BusViewModel
   >();
-  displayedColumns: string[] = busTableColumns;
   selection = new SelectionModel<BusViewModel>(false, []);
+  displayedColumns: string[] = busTableColumns;
 
   constructor(
     public dialog: MatDialog,
@@ -43,22 +44,31 @@ export class BusListComponent implements OnInit {
   }
 
   onAdd(): void {
-    this.launchDialog(ModalType.New);
+    const model = new BusModalViewModel(ModalType.New);
+    model.bus = new Bus(0, "", BusType.Regular);
+    this.launchEditDialog(model);
   }
 
   onEdit(): void {
-    this.launchDialog(ModalType.Edit);
+    const selected = this.selection.selected[0];
+    const model = new BusModalViewModel(ModalType.Edit);
+    model.bus = new Bus(selected.id, selected.plateNumber, selected.busType);
+    model.stationId = selected.stationId;
+    model.slotId = selected.slotId;
+    model.slotNumber = selected.slotNumber;
+    this.launchEditDialog(model);
   }
 
-  Delete(): void {
-    const selected = this.selection.selected[0];
-    if (selected) {
-      // TODO: Refactor callbacks hell
-      this.busService.removeBus(selected.id).subscribe(
-        () => this.loadDataSource(),
-        error => console.log(error)
-      );
-    }
+  onDelete(): void {
+    this.launchConfirmDialog({
+      title: `Are you sure you want to delete the "${this.selection.selected[0].plateNumber}" bus?`
+    });
+  }
+
+  onDblClick(row: BusViewModel): void {
+    this.selection.toggle(row);
+    this.onEdit();
+    this.selection.clear();
   }
 
   applyFilter(filterValue: string): void {
@@ -72,21 +82,26 @@ export class BusListComponent implements OnInit {
   }
 
   private loadDataSource(): void {
-    this.commonService.getBusesStationSlots().subscribe(
-      (data: [Bus[], Station[], StationSlot[]]) => {
-        const dataSource = data[0].map(b => {
+    this.commonService.getBusesStationsSlots().subscribe(
+      (result: [Bus[], Station[], StationSlot[]]) => {
+        // TODO: reconsider mapping implementation
+        const dataSource = result[0].map(b => {
           let stationAndSlot: string = "";
-          const busSlot = data[2].find(sl => sl.busId === b.id);
+          const busSlot = result[2].find(sl => sl.busId === b.id);
 
           if (busSlot) {
-            const station = data[1].find(s => s.id === busSlot.stationId);
-            stationAndSlot = `${station.name} @ slot: ${busSlot.id}`;
+            const station = result[1].find(s => s.id === busSlot.stationId);
+            stationAndSlot = `${station.name} @ slot: ${busSlot.slotNumber}`;
           }
 
           return new BusViewModel(
             b.id,
             b.plateNumber,
+            b.busType,
             BusType[b.busType],
+            busSlot.stationId,
+            busSlot.id,
+            busSlot.slotNumber,
             stationAndSlot
           );
         });
@@ -99,14 +114,38 @@ export class BusListComponent implements OnInit {
     );
   }
 
-  private launchDialog(modalType: ModalType): void {
+  private launchEditDialog(model: BusModalViewModel): void {
     const dialogRef = this.dialog.open(BusEditComponent, {
       // TODO: make width responsive
       width: "500px",
-      data: new BusModalViewModel(modalType)
+      data: model
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.loadDataSource();
+      this.selection.clear();
+    });
+  }
+
+  private launchConfirmDialog(data: any): void {
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      // TODO: make width responsive
+      width: "500px",
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const selected = this.selection.selected[0];
+        if (selected) {
+          this.busService.deleteBus(selected.id).subscribe(
+            () => {
+              console.info("Bus deleted");
+              this.loadDataSource();
+              this.selection.clear();
+            },
+            error => console.log(error)
+          );
+        }
+      } else this.selection.clear();
     });
   }
 }

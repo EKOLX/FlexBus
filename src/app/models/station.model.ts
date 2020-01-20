@@ -9,6 +9,7 @@ export class Station {
 export class StationSlot {
   constructor(
     public id: number,
+    public slotNumber: number,
     public stationId: number,
     public busId?: number
   ) {}

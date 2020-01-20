@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { httpConfigs } from "./local.db";
+import { httpConfigs } from "../db/local.db";
 import { Station, StationSlot } from "../models/station.model";
 
 @Injectable({
@@ -39,8 +39,18 @@ export class StationService {
   }
 
   saveStation(station: Station): Observable<Station> {
-    return this.http.post<Station>(
-      `${httpConfigs.serverApi}/stations`,
+    if (station.id === 0) {
+      console.info("Adding new station");
+      return this.http.post<Station>(
+        `${httpConfigs.serverApi}/stations`,
+        station,
+        httpConfigs.options
+      );
+    }
+
+    console.info("Updating existing station");
+    return this.http.put<Station>(
+      `${httpConfigs.serverApi}/stations/${station.id}`,
       station,
       httpConfigs.options
     );
@@ -48,6 +58,7 @@ export class StationService {
 
   saveStationSlot(slot: StationSlot): Observable<StationSlot> {
     if (slot.id === 0) {
+      console.info("Adding new slot");
       return this.http.post<StationSlot>(
         `${httpConfigs.serverApi}/stationSlots`,
         slot,
@@ -55,9 +66,17 @@ export class StationService {
       );
     }
 
+    console.info("Updating existing slot");
     return this.http.put<StationSlot>(
       `${httpConfigs.serverApi}/stationSlots/${slot.id}`,
       slot,
+      httpConfigs.options
+    );
+  }
+
+  deleteStation(id: number): Observable<void> {
+    return this.http.delete<void>(
+      `${httpConfigs.serverApi}/stations/${id}`,
       httpConfigs.options
     );
   }
