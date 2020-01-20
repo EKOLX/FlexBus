@@ -5,7 +5,7 @@
     <section>
       <mat-form-field>
         <input matInput type="text" placeholder="Plate number" formControlName="plateNumber" />
-        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.wrongFormat">Format of BUS-XXX-XXX where X is an
+        <mat-error *ngIf="plateNumber.errors && plateNumber.errors.wrongFormat">Format is BUS-XXX-XXX where X is an
           alpha-numeric
           character</mat-error>
         <mat-error *ngIf="plateNumber.errors && plateNumber.errors.isExist">Bus with plate number
