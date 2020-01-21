@@ -63,10 +63,11 @@ export class BusEditComponent implements OnInit {
       slotNumber: this.slotNumber
     });
 
+    this.registerOnChanges();
+
     this.stationService.getStations().subscribe((data: Array<Station>) => {
       this.stations = data;
     });
-    this.registerOnChanges();
   }
 
   onSubmit(): void {

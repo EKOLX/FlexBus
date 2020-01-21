@@ -14,7 +14,6 @@ import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
 import { busTableColumns } from "src/app/db/local.db";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
 import { CommonService } from "../services/common.service";
-import { BusService } from "../services/bus.service";
 import { ConfirmationComponent } from "../shared/confirmation/confirmation.component";
 
 @Component({
@@ -33,11 +32,7 @@ export class BusListComponent implements OnInit {
   selection = new SelectionModel<BusViewModel>(false, []);
   displayedColumns: string[] = busTableColumns;
 
-  constructor(
-    public dialog: MatDialog,
-    private commonService: CommonService,
-    private busService: BusService
-  ) {}
+  constructor(public dialog: MatDialog, private commonService: CommonService) {}
 
   ngOnInit() {
     this.loadDataSource();
