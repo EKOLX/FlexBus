@@ -1,4 +1,8 @@
 table,
-mat-form-field {
+mat-form-field:not(.column-field) {
   width: 100%;
+}
+
+section.filter-section mat-form-field:not(:last-child) {
+  margin-right: 10px;
 }
