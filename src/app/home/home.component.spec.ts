@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { HomeComponent } from "./home.component";
+import { SvgAssetsModule } from "../svg-assets/svg-assets.module";
 
-import { HomeComponent } from './home.component';
-
-xdescribe('HomeComponent', () => {
+describe("HomeComponent", () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
-    })
-    .compileComponents();
+      declarations: [HomeComponent],
+      imports: [SvgAssetsModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ xdescribe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -44,4 +44,35 @@ describe("BusService", () => {
 
     done();
   });
+
+  it("#saveBus should return Observable<Bus>", (done: DoneFn) => {
+    const bus: Bus = { id: 1, busType: 1, plateNumber: "BUS-AZE-001" };
+    service.saveBus(bus).subscribe(result => {
+      expect(result).toEqual(bus);
+    });
+
+    const busApi = httpMock.expectOne(`${httpConfigs.serverApi}/buses`);
+    expect(busApi.request.method).toBe("POST");
+    httpMock.verify();
+
+    done();
+  });
+
+  it("#removeBus should be called once", (done: DoneFn) => {
+    const buses: Bus[] = [
+      { id: 1, busType: 1, plateNumber: "BUS-AZE-001" },
+      { id: 2, busType: 2, plateNumber: "BUS-AZE-002" }
+    ];
+    const busId = buses[0].id;
+
+    service.removeBus(busId).subscribe();
+
+    const busApi = httpMock.expectOne(
+      `${httpConfigs.serverApi}/buses/${busId}`
+    );
+    expect(busApi.request.method).toBe("DELETE");
+    httpMock.verify();
+
+    done();
+  });
 });
