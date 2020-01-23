@@ -14,7 +14,8 @@ import * as Material from "@angular/material";
     Material.MatCheckboxModule,
     Material.MatMenuModule,
     Material.MatToolbarModule,
-    Material.MatProgressSpinnerModule
+    Material.MatProgressSpinnerModule,
+    Material.MatIconModule
   ],
   exports: [
     Material.MatDialogModule,
@@ -28,7 +29,8 @@ import * as Material from "@angular/material";
     Material.MatCheckboxModule,
     Material.MatMenuModule,
     Material.MatToolbarModule,
-    Material.MatProgressSpinnerModule
+    Material.MatProgressSpinnerModule,
+    Material.MatIconModule
   ]
 })
 export class MaterialModule {}

@@ -11,67 +11,62 @@
 
   <mat-card-actions>
     <button mat-stroked-button color="primary" (click)="onAdd()">Add</button>
-    <button
-      mat-stroked-button
-      color="warn"
-      (click)="onEdit()"
-      [disabled]="selection.selected.length == 0"
-    >
+    <button mat-stroked-button color="warn" (click)="onEdit()" [disabled]="selection.selected.length == 0">
       Edit
     </button>
-    <button
-      mat-stroked-button
-      color="accent"
-      (click)="onDelete()"
-      [disabled]="selection.selected.length == 0"
-    >
+    <button mat-stroked-button color="accent" (click)="onDelete()" [disabled]="selection.selected.length == 0">
       Delete
     </button>
   </mat-card-actions>
 
   <mat-card-content>
-    <!-- <section class="filter-section">
+    <section class="filter-section">
       <mat-form-field class="column-field">
         <mat-label>Filter by Station</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let value of stations" [value]="value">
-            {{ value }}
+        <mat-select #stationSelect multiple>
+          <mat-option *ngFor="let station of stationOptions" [value]="station.id">
+            {{ station.name }}
           </mat-option>
+          <button mat-button mat-icon-button matSuffix (click)="onStationApply()">
+            <mat-icon>done</mat-icon>Apply
+          </button>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="column-field">
         <mat-label>Filter by Bus type</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let value of stations" [value]="value">
-            {{ value }}
+        <mat-select #busTypeSelect multiple>
+          <mat-option *ngFor="let busType of busTypeOptions" [value]="busType.value">
+            {{ busType.name }}
           </mat-option>
+          <button mat-button mat-icon-button matSuffix (click)="onBusTypeApply()">
+            <mat-icon>done</mat-icon>Apply
+          </button>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="column-field">
-        <input matInput placeholder="Filter by Bus number" />
+        <input matInput [(ngModel)]="plateNumberOption" placeholder="Filter by Bus number" />
+        <button mat-button mat-icon-button matSuffix class="done" (click)="onBusNumberApply()">
+          <mat-icon>done</mat-icon>Apply
+        </button>
+        <button mat-button *ngIf="plateNumberOption" class="clear" matSuffix mat-icon-button aria-label="Clear"
+          (click)="plateNumberOption=''">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
-    </section> -->
+    </section>
 
-    <mat-form-field>
-      <input
-        matInput
-        (keyup)="applyFilter($event.target.value)"
-        placeholder="Filter by any column"
-      />
-    </mat-form-field>
+    <!-- <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter by any column" />
+    </mat-form-field> -->
 
     <table mat-table matSort [dataSource]="busList">
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selection.toggle(row) : null"
-            [checked]="selection.isSelected(row)"
-            [aria-label]="checkboxLabel(row)"
-          >
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
           </mat-checkbox>
         </td>
       </ng-container>
@@ -98,19 +93,11 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (dblclick)="onDblClick(row)"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (dblclick)="onDblClick(row)"></tr>
     </table>
   </mat-card-content>
 
   <mat-card-footer>
-    <mat-paginator
-      [length]="busList.data.length"
-      [pageSize]="5"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-    ></mat-paginator>
+    <mat-paginator [length]="busList.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </mat-card-footer>
 </mat-card>

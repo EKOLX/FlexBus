@@ -3,7 +3,9 @@ import {
   MatDialog,
   MatTableDataSource,
   MatSort,
-  MatTable
+  MatTable,
+  MatSelect,
+  MatOption
 } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { SelectionModel } from "@angular/cdk/collections";
@@ -11,7 +13,7 @@ import { ModalType, BusType } from "../models/enums.model";
 import { Bus } from "../models/bus.model";
 import { Station, StationSlot } from "../models/station.model";
 import { BusModalViewModel, BusViewModel } from "../viewModels/busView.model";
-import { busTableColumns } from "src/app/db/local.db";
+import { busTableColumns, busTypes } from "src/app/db/local.db";
 import { BusEditComponent } from "./bus-edit/bus-edit.component";
 import { CommonService } from "../services/common.service";
 import { ConfirmationComponent } from "../shared/confirmation/confirmation.component";
@@ -25,12 +27,19 @@ export class BusListComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<BusViewModel>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild("stationSelect", { static: true }) stationSelect: MatSelect;
+  @ViewChild("busTypeSelect", { static: true }) busTypeSelect: MatSelect;
 
   busList: MatTableDataSource<BusViewModel> = new MatTableDataSource<
     BusViewModel
   >();
   selection = new SelectionModel<BusViewModel>(false, []);
   displayedColumns: string[] = busTableColumns;
+  stationOptions: Station[] = [];
+  selectedStationOptions = [];
+  busTypeOptions = busTypes;
+  selectedBusTypeOptions = [];
+  plateNumberOption: string = "";
 
   constructor(public dialog: MatDialog, private commonService: CommonService) {}
 
@@ -66,6 +75,27 @@ export class BusListComponent implements OnInit {
     this.selection.clear();
   }
 
+  onStationApply(): void {
+    this.selectedStationOptions = (this.stationSelect
+      .selected as MatOption[]).map(op => op.value);
+    this.loadDataSource();
+
+    this.stationSelect.close();
+  }
+
+  onBusTypeApply(): void {
+    this.loadDataSource();
+    this.selectedBusTypeOptions = (this.busTypeSelect
+      .selected as MatOption[]).map(op => op.value);
+    this.loadDataSource();
+
+    this.busTypeSelect.close();
+  }
+
+  onBusNumberApply(): void {
+    this.loadDataSource();
+  }
+
   applyFilter(filterValue: string): void {
     this.busList.filter = filterValue.trim().toLowerCase();
   }
@@ -80,12 +110,48 @@ export class BusListComponent implements OnInit {
     this.commonService.getBusesStationsSlots().subscribe(
       (result: [Bus[], Station[], StationSlot[]]) => {
         // TODO: reconsider mapping implementation
-        const dataSource = result[0].map(b => {
+        this.stationOptions = result[1];
+
+        let stations: Station[] = [];
+        let stationSlots: StationSlot[] = [];
+        let buses: Bus[] = [];
+
+        if (this.plateNumberOption) {
+          buses = result[0].filter(
+            b =>
+              b.plateNumber.toLocaleUpperCase() ===
+              this.plateNumberOption.toLocaleUpperCase()
+          );
+        } else {
+          if (this.selectedStationOptions.length > 0) {
+            stations = result[1].filter(st =>
+              this.selectedStationOptions.includes(st.id)
+            );
+            stationSlots = result[2].filter(sl =>
+              this.selectedStationOptions.includes(sl.stationId)
+            );
+            buses = result[0].filter(b =>
+              stationSlots.map(sl => sl.busId).includes(b.id)
+            );
+          } else {
+            stations = result[1];
+            stationSlots = result[2];
+            buses = result[0];
+          }
+
+          if (this.selectedBusTypeOptions.length > 0) {
+            buses = buses.filter(b =>
+              this.selectedBusTypeOptions.includes(b.busType)
+            );
+          }
+        }
+
+        const dataSource = buses.map(b => {
           let stationAndSlot: string = "";
-          const busSlot = result[2].find(sl => sl.busId === b.id);
+          const busSlot = stationSlots.find(sl => sl.busId === b.id);
 
           if (busSlot) {
-            const station = result[1].find(s => s.id === busSlot.stationId);
+            const station = stations.find(s => s.id === busSlot.stationId);
             stationAndSlot = `${station.name} @ slot: ${busSlot.slotNumber}`;
           }
 
